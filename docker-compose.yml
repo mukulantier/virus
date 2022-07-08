@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  redis:
+   image: 'redis:7.0'
+   restart: always 
+   container_name: Redis-Server
+   environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+   ports:
+      - "6379:6379"
+   volumes:
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./cache:/data
+   entrypoint: redis-server /usr/local/etc/redis/redis.conf
+   deploy:
+       resources:
+           limits:
+             memory: 2048M
+           reservations:
+             memory: 1024M
+services:
+    rabbitmq3:
+        container_name: "rabbitmq"
+        image: rabbitmq:3.8-management-alpine
+        environment:
+            - RABBITMQ_DEFAULT_USER=rbmq_admin
+            - RABBITMQ_DEFAULT_PASS=70sFKZAy2GkHGYf78
+        ports:
+            # AMQP protocol port
+            - '5672:5672'
+            # HTTP management UI
+            - '15672:15672'
